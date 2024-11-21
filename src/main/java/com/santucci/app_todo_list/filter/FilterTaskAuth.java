@@ -25,41 +25,44 @@ public class FilterTaskAuth extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         var servletPath = request.getServletPath();
+        System.out.println("PATH " + servletPath);
+        if (servletPath.startsWith("/tasks/")) {
 
-        if (servletPath.equals("/tasks/")) {
+            // Pegar a autenticação (usuario e senha)
             var authorization = request.getHeader("Authorization");
-            var authEncoded = authorization.substring("Basic".length()).trim(); // pegará o meu basic e removerá todos
-                                                                                // os espaços que eu tenho
+
+            var authEncoded = authorization.substring("Basic".length()).trim();
+
             byte[] authDecode = Base64.getDecoder().decode(authEncoded);
 
             var authString = new String(authDecode);
 
+         
             String[] credentials = authString.split(":");
             String username = credentials[0];
             String password = credentials[1];
 
-            // Validar o usuário
+            // Validar usuário
             var user = this.userRepository.findByUsername(username);
             if (user == null) {
-                response.sendError(401, "Usuário sem autorização.");
+                response.sendError(401);
             } else {
-                // Validar a senha
+
+                // Validar senha
                 var passwordVerify = BCrypt.verifyer().verify(password.toCharArray(), user.getPassword());
-                if (passwordVerify.verified == true) {
+                if (passwordVerify.verified) {
+                    
+                    // Segue viagem
                     request.setAttribute("idUser", user.getId());
                     filterChain.doFilter(request, response);
-
                 } else {
                     response.sendError(401);
                 }
-            
+
             }
-        }
-        else{
+        } else {
             filterChain.doFilter(request, response);
         }
-
-        
 
     }
 
