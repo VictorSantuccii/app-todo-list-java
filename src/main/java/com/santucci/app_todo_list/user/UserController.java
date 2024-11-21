@@ -14,7 +14,7 @@ import at.favre.lib.crypto.bcrypt.BCrypt;
 @RequestMapping("/users")
 public class UserController {
 
-    @Autowired // irá gerenciar a instanciação da minha classe 
+    @Autowired 
     private IUserRepository userRepository;
     
     @PostMapping("/")
