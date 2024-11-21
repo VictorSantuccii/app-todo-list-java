@@ -1,14 +1,15 @@
 package com.santucci.app_todo_list.user;
 
+import java.time.LocalDateTime;
+import java.util.UUID;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import java.time.LocalDateTime;
-import java.util.UUID;
-
 import lombok.Data;
 
 @Data
@@ -19,7 +20,7 @@ public class UserModel {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-
+    // @Column(name = " name ")
     private String username;
     private String password;
     private String name;
@@ -29,6 +30,8 @@ public class UserModel {
     
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    
     
 
     // getters e setters 
